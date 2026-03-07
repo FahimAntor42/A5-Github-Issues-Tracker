@@ -55,6 +55,61 @@
             </div>
         </div>
     </section>
-    
+    <main id="auth-dashboard-wrapper" class="hidden min-h-screen bg-[#F8F9FA] pb-12">
+        
+        <nav class="bg-white border-b border-gray-200 px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <img src="Images/github-logo.png" alt="GitHub Logo" class="w-8 h-8 object-contain">
+                <h2 class="text-[20px] font-bold text-[#24292F]">GitHub Issues Tracker</h2>
+            </div>
+            
+            <div class="flex w-full sm:w-auto gap-4 items-center">
+                <div class="relative w-full sm:w-72">
+                    <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" id="live-search-input" placeholder="Search issues..." class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-[14px] focus:outline-none focus:border-[#5200FF] focus:ring-1 focus:ring-[#5200FF] transition-all bg-gray-50">
+                </div>
+                <button class="bg-[#5200FF] hover:bg-[#3b00cc] text-white px-5 py-2 rounded-lg text-[14px] font-medium transition-colors whitespace-nowrap">
+                    + New Issue
+                </button>
+            </div>
+        </nav>
+
+        <div class="max-w-[1400px] mx-auto px-8 mt-8">
+            
+            <div class="bg-white p-2 inline-flex rounded-lg shadow-sm mb-6 gap-2 border border-gray-100">
+                <button id="tab-all" class="px-8 py-2 rounded-md bg-[#5200FF] text-white text-[14px] font-medium transition-all">All</button>
+                <button id="tab-open" class="px-8 py-2 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-[14px] font-medium transition-all">Open</button>
+                <button id="tab-closed" class="px-8 py-2 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-[14px] font-medium transition-all">Closed</button>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-6 border-b border-gray-100">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-[#f2f7fb] p-3 rounded-full flex items-center justify-center">
+                            <img src="Images/Aperture.png" alt="">
+                        </div>
+                        <div>
+                            <h3 class="text-[18px] font-bold text-gray-800"><span id="total-issue-count">0</span> Issues</h3>
+                            <p class="text-[13px] text-gray-500 mt-0.5">Track and manage your project issues</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-5 text-[14px] font-medium text-gray-700 mt-4 sm:mt-0">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span> Open
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#8b5cf6]"></span> Closed 
+                        </div>
+                    </div>
+                </div>
+
+                <div id="issues-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    </div>
+
+            </div>
+        </div>
+    </main>
 </body>
 </html>

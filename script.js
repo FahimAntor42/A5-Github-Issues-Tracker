@@ -27,7 +27,7 @@ if (isAuthorized) {
     
     document.getElementById('auth-admin-username').value = '';
 
-    document.getElementById('auth-admin-password').value = '' ;
+    document.getElementById('auth-admin-password').value = '';
 
 }
 else {
