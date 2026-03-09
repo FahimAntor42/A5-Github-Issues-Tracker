@@ -228,3 +228,111 @@ function renderIssueCards(issuesArray, containerId) {
     });
     document.getElementById('total-issue-count').innerText = issuesArray.length;
 }
+
+// 6. THE MODAL LOGIC
+function showIssueDetailsLocally(id) {
+    const modal = document.getElementById('issue-modal');
+    const modalContent = document.getElementById('modal-content-container');
+    
+    modal.classList.remove('hidden');
+
+    const issue = localIssuesData.find(item => item.id === id);
+
+    if (issue) {
+        
+        const dateObj = new Date(issue.createdAt);
+        const formattedDateModal = `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`;
+
+        
+        const labelsHTML = (issue.labels || []).map(label => {
+            const lowerLabel = label.toLowerCase();
+            let colorClass = 'text-[#10b981] border-[#10b981] bg-[#10b981]/10'; 
+            let icon = `<svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>`;
+
+            if (lowerLabel.includes('bug')) {
+                colorClass = 'text-[#ef4444] border-[#fca5a5] bg-[#fef2f2]'; 
+                icon = `<svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+            } else if (lowerLabel.includes('help')) {
+                colorClass = 'text-[#d97706] border-[#fde047] bg-[#fffbeb]'; 
+                icon = `<svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>`;
+            }
+
+            return `<span class="${colorClass} border px-3 py-1.5 rounded-full text-[12px] font-bold flex items-center gap-1.5 uppercase tracking-wide">
+                        ${icon} ${label}
+                    </span>`;
+        }).join('');
+
+        
+        let priorityBadgeModal = '';
+        if (issue.priority.toLowerCase() === 'high') {
+            priorityBadgeModal = '<span class="bg-[#ef4444] text-white px-5 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-wide">HIGH</span>';
+        } else if (issue.priority.toLowerCase() === 'medium') {
+            priorityBadgeModal = '<span class="bg-[#f59e0b] text-white px-5 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-wide">MEDIUM</span>';
+        } else {
+            priorityBadgeModal = '<span class="bg-[#9ca3af] text-white px-5 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-wide">LOW</span>';
+        }
+
+        const statusPillClass = issue.status === 'open' ? 'bg-[#00a870]' : 'bg-[#8b5cf6]';
+        const statusText = issue.status === 'open' ? 'Opened' : 'Closed';
+
+        
+        modalContent.innerHTML = `
+            <div class="flex flex-col">
+                
+                <h2 class="text-[26px] font-bold text-[#1f2937] mb-3 leading-tight">${issue.title}</h2>
+                
+                <div class="flex items-center gap-3 text-[14px] text-gray-500 mb-6">
+                    <span class="${statusPillClass} text-white px-3 py-0.5 rounded-full text-[12px] font-semibold">${statusText}</span>
+                    <span class="text-gray-400">•</span>
+                    <span>Opened by ${issue.author}</span>
+                    <span class="text-gray-400">•</span>
+                    <span>${formattedDateModal}</span>
+                </div>
+                
+                <div class="flex flex-wrap gap-2 mb-6">
+                    ${labelsHTML}
+                </div>
+
+                <p class="text-[16px] text-[#6b7280] leading-relaxed mb-8">
+                    ${issue.description}
+                </p>
+                
+                <div class="bg-[#f9fafb] rounded-xl p-6 flex flex-col sm:flex-row sm:items-center gap-6 mb-6">
+                    <div class="flex-1">
+                        <p class="text-[14px] text-gray-500 mb-1">Assignee:</p>
+                        <p class="text-[16px] font-bold text-[#1f2937]">${issue.assignee || 'Unassigned'}</p>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[14px] text-gray-500 mb-2">Priority:</p>
+                        <div>${priorityBadgeModal}</div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end mt-2">
+                    <button id="purple-close-btn" class="bg-[#5200FF] hover:bg-[#3b00cc] text-white font-bold py-2.5 px-8 rounded-lg transition-colors">
+                        Close
+                    </button>
+                </div>
+            </div>`;
+
+        
+        document.getElementById('purple-close-btn').addEventListener('click', () => {
+            document.getElementById('issue-modal').classList.add('hidden');
+        });
+
+    } else {
+        modalContent.innerHTML = `<p class="text-red-500 font-bold py-10 text-center">Failed to load issue details.</p>`;
+    }
+}
+
+
+document.getElementById('close-modal-btn').addEventListener('click', () => {
+    document.getElementById('issue-modal').classList.add('hidden');
+});
+
+
+document.getElementById('issue-modal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('issue-modal')) {
+        document.getElementById('issue-modal').classList.add('hidden');
+    }
+});
